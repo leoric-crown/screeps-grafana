@@ -21,6 +21,7 @@ zlib = require 'zlib'
 StatsD = require 'node-statsd'
 token = ""
 succes = false
+baseUrl = "http://"+process.env.SCREEPS_SERVER_HOSTNAME+":21025"
 class ScreepsStatsd
 
   ###
@@ -34,7 +35,7 @@ class ScreepsStatsd
     rp.defaults jar: true
     @loop()
 
-    setInterval @loop, 15000
+    setInterval @loop, 5000
 
   loop: () =>
     @signin()
@@ -46,7 +47,7 @@ class ScreepsStatsd
     @client = new StatsD host: process.env.GRAPHITE_PORT_8125_UDP_ADDR
     console.log "New login request - " + new Date()
     options =
-      uri: 'https://screeps.com/api/auth/signin'
+      uri: baseUrl + '/api/auth/signin'
       json: true
       method: 'POST'
       body:
@@ -59,7 +60,7 @@ class ScreepsStatsd
   getMemory: () =>
     succes = false
     options =
-      uri: 'https://screeps.com/api/user/memory'
+      uri: baseUrl + '/api/user/memory'
       method: 'GET' 
       json: true
       resolveWithFullResponse: true
